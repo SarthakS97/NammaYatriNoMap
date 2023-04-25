@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Namma Yatri</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    .container {
+      border: 3px solid black;
+      border-radius: 10px;
+      padding: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Namma Yatri - Driver</h1>
+    <p>Name: <span id="name"></span> </p>
+    <p>Mobile: <span id="mobile"></span> </p>
+    <p>Customer Location: <button id="from-btn">Show on Map</button></p>
+    <p>Customer Destination: <button id="to-btn">Show on Map</button></p>
+    <p>Distance: <span id="distance"></span> Km</p>
+    <p>Estimated Price: Rs. <span id="price"></span></p>
+  </div>
+
+  <script>
+    // Retrieve the values from localStorage
+    const fromLat = localStorage.getItem("fromLat");
+    const fromLon = localStorage.getItem("fromLon");
+    const toLat = localStorage.getItem("toLat");
+    const toLon = localStorage.getItem("toLon");
+    var distance = localStorage.getItem("distance");
+    const name = localStorage.getItem("name");
+    const mobile = localStorage.getItem("mobile");
+    const incentive = localStorage.getItem("incentive")
+
+
+    // Display the values on the page
+    document.getElementById("name").innerText = name;
+    document.getElementById("mobile").innerText = mobile;
+
+    document.getElementById("from-btn").addEventListener("click", function () {
+      window.open(`https://www.google.com/maps?q=${fromLat},${fromLon}`, '_blank');
+    });
+
+    document.getElementById("to-btn").addEventListener("click", function () {
+      window.open(`https://www.google.com/maps?q=${toLat},${toLon}`, '_blank');
+    });
+
+    const total_price = (distance * 22.5).toFixed(0).toString() + "+" + (incentive).toString()
+    document.getElementById("distance").innerText = distance;
+    document.getElementById("price").innerText = total_price;
+
+  </script>
+</body>
+
+</html>

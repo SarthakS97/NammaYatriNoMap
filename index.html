@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Namma Yatri</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    .container {
+      border: 3px solid black;
+      border-radius: 10px;
+      padding: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Namma Yatri - User</h1>
+  <form>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name"><br>
+    <label for="mobile">Mobile Number:</label>
+    <input type="text" id="mobile" name="mobile"><br>
+    <label for="from">Your Location:</label>
+    <input type="text" id="from" name="from"><br>
+    <label for="to">To:</label>
+    <input type="text" id="to" name="to">
+    <label for="incentive">Add an incentive* (total = fare + incentive)</label>
+    <input type="text" id="incentive" name="incentive">
+    <br>
+    <button type="button" onclick="calculateDistance()">Estimate Price</button>
+    <button type="button" onclick="bookNow()">Book Now</button>
+  </form>
+  <br>
+  <div class="container">
+    <p> How to find Latitude and Longitude from Google maps</p>
+    <ul>
+      <li>Open Google Maps. Find the road nearest to you and long press on the road to drop a pin</li>
+      <li>Next scroll up to find comma seprated latitude and longitude. Long press on it to copy to clipboard</li>
+      <li>Now paste this in the Namma Yatri webpage in the field labeled as 'Your Location'</li>
+      <li>Do the same process for the location you want to go to</li>
+    </ul>
+    <p>*Incentive is not compulsory. Although if you do include an incentive chances of getting a ride increases</p>
+    <script>
+      function calculateDistance() {
+        // Get the input values
+        const from = document.getElementById("from").value;
+        const to = document.getElementById("to").value;
+        const incentive = document.getElementById("incentive").value;
+        const name = document.getElementById("name").value;
+        const mobile = document.getElementById("mobile").value;
+
+
+        if (!from || !to) {
+          return;
+        }
+
+        // Split the input values into latitude and longitude
+        const [fromLat, fromLon] = from.split(",");
+        const [toLat, toLon] = to.split(",");
+
+        // Make the API request to OSRM using fetch
+        const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${fromLon},${fromLat};${toLon},${toLat}?overview=false`.replace(/\s+/g, '');
+        fetch(osrmUrl)
+          .then(response => response.json())
+          .then(data => {
+            const distance = (data.routes[0].distance / 1000).toFixed(2);
+            const price = (distance * 22.5).toFixed(0);
+
+            const result = document.createElement("p");
+            result.textContent = `Distance: ${distance} Km\nEstimated Price: Rs. ${price} + ${incentive}`;
+
+            // Remove any existing result elements
+            const existingResult = document.getElementById("result");
+            if (existingResult) {
+              existingResult.remove();
+            }
+
+            // Append the new <p> element to the form
+            const form = document.getElementsByTagName("form")[0];
+            form.appendChild(result);
+
+            // Store the result in localStorge
+            localStorage.setItem("fromLat", fromLat);
+            localStorage.setItem("fromLon", fromLon);
+            localStorage.setItem("toLat", toLat);
+            localStorage.setItem("toLon", toLon);
+            localStorage.setItem("distance", distance);
+            localStorage.setItem("price", price);
+            localStorage.setItem("incentive", incentive);
+            localStorage.setItem("name", name);
+            localStorage.setItem("mobile", mobile);
+          })
+          .catch(error => {
+            console.error("Error retrieving data from OSRM:", error);
+          });
+      }
+
+      function bookNow() {
+        // Check if all fields are filled
+        const name = document.getElementById("name").value;
+        const mobile = document.getElementById("mobile").value;
+        const from = document.getElementById("from").value;
+        const to = document.getElementById("to").value;
+        const distance = localStorage.getItem("distance")
+        const incentive = localStorage.getItem("incentive");
+        function showAlert() {
+          alert("Booked. Looking for drivers nearby!");
+        }
+        showAlert()
+        if (!name || !mobile || !from || !to || !distance) {
+          alert("Please fill all the fields and calculate the distance and price.");
+          return;
+        }
+      }
+
+    </script>
+</body>
+
+</html>
