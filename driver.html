@@ -23,6 +23,8 @@
     <p>Customer Destination: <button id="to-btn">Show on Map</button></p>
     <p>Distance: <span id="distance"></span> Km</p>
     <p>Estimated Price: Rs. <span id="price"></span></p>
+    <button type="button" onclick="Accept()">Accept</button>
+    <button type="button" onclick="Reject()">Reject</button>
   </div>
 
   <script>
@@ -52,6 +54,14 @@
     const total_price = (distance * 22.5).toFixed(0).toString() + "+" + (incentive).toString()
     document.getElementById("distance").innerText = distance;
     document.getElementById("price").innerText = total_price;
+
+    function Accept() {
+      alert("Ride Accepted!")
+    }
+
+    function Reject() {
+      alert("Ride Rejected!")
+    }
 
   </script>
 </body>
