@@ -13,5 +13,8 @@ Website demo: https://sarthaks97.github.io/NammaYatriNoMap/
 6. If you want to proceed, click Book Now
 
 # Disclaimer
-This project is only a demo. It is just to showcase how to use navigation in a mobility app without the use of Google Maps API. Infact the website doesn't even have a backend. The variables are stored in localStorage and displayed on a different page.
+This project is only a demo. It is to showcase how to use navigation in a mobility app without the use of Google Maps API. Infact the website doesn't even have a backend. The variables are stored in localStorage and displayed on a different page.
+
+## Some notes for production
+When it is to be deployed, the location data filled by the user can be stored in a database. The driver will see a list of bookings (queried from the database) nearby. To connect the users with the nearby driver, navigator.geolocation.getcurrentposition() on the driver's phone can be used. 
 
